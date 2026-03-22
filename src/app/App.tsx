@@ -6,7 +6,7 @@ import { MainPage } from '../pages/MainPage';
 
 export const App = () => {
   return (
-    <Box minHeight="100vh" fontWeight={300}>
+    <Box height="100vh" fontWeight={300}>
       <MainPage />
     </Box>
   );

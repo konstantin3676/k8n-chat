@@ -10,7 +10,6 @@
 
 .buttonsContainer {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   height: 40px;
   opacity: 0;
