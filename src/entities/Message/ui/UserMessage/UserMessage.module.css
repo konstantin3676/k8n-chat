@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 32px;
+
+  &:hover .buttonsContainer {
+    opacity: 1;
+  }
+}
+
+.messageContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message {
+  width: fit-content;
+  max-width: 70%;
+  border-radius: 20px;
+  background: #f7f8fc;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  padding: 8px 20px;
+  line-height: 28px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40px;
+  opacity: 0;
+  transition: opacity 300ms;
+}

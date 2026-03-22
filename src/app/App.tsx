@@ -1,3 +1,5 @@
+import './styles/index.css';
+
 import { Box } from '@mui/material';
 
 import { MainPage } from '../pages/MainPage';
