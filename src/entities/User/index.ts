@@ -4,4 +4,4 @@ export {
   getUserInited,
 } from './model/selectors/userSelectors';
 
-export type { User, UserSchema } from './model/types/user';
+export type { User, ApiKeyScope, UserSchema } from './model/types/user';
