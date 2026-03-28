@@ -1,6 +1,9 @@
-export type StateSchema = {};
-
+import type { UserSchema } from '@/entities/User';
 import type { AxiosInstance } from 'axios';
+
+export type StateSchema = {
+  user: UserSchema;
+};
 
 export type ThunkExtraArg = {
   api: AxiosInstance;

@@ -4,3 +4,4 @@ export type {
   ThunkConfig,
   ThunkExtraArg,
 } from './config/StateSchema';
+export { store } from './config/store';
