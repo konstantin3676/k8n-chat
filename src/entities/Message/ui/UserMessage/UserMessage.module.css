@@ -17,7 +17,7 @@
   width: fit-content;
   max-width: 70%;
   border-radius: 20px;
-  background: #f7f8fc;
+  background-color: var(--secondary-bg-color);
   overflow-wrap: break-word;
   white-space: pre-wrap;
   padding: 8px 20px;
