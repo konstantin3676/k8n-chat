@@ -1,4 +1,5 @@
 import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localStorage';
+import { isValidAccessToken } from '@/shared/utils/isValidAccessToken';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -17,10 +18,15 @@ export const userSlice = createSlice({
       state.authData = action.payload;
     },
     initAuthData: (state) => {
-      const user = localStorage.getItem(USER_LOCALSTORAGE_KEY);
+      const userData = localStorage.getItem(USER_LOCALSTORAGE_KEY);
 
-      if (user) {
-        state.authData = JSON.parse(user);
+      if (userData) {
+        const user = JSON.parse(userData) as User;
+        if (isValidAccessToken(user.expires_at)) {
+          state.authData = user;
+        } else {
+          localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+        }
       }
       state.inited = true;
     },

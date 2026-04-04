@@ -22,7 +22,7 @@ export const App = () => {
 
   return (
     <Box height="100vh" fontWeight={300}>
-      {authData?.apiKey ? <MainPage /> : <AuthPage />}
+      {authData?.access_token ? <MainPage /> : <AuthPage />}
     </Box>
   );
 };

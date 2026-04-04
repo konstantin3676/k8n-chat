@@ -11,4 +11,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api/v2/oauth': {
+        target: 'https://ngw.devices.sberbank.ru:9443',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });

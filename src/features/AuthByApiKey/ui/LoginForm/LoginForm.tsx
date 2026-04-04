@@ -1,25 +1,20 @@
 import { useState } from 'react';
 
-import { userActions } from '@/entities/User';
-import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localStorage';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
-import {
-  Button,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  TextField,
-} from '@mui/material';
+import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
+import { Button, FormControlLabel, Paper, Radio, RadioGroup, TextField } from '@mui/material';
 
+import { getLoginPassword, getLoginScope } from '../../model/selectors/loginSelectors';
+import { loginByApiKey } from '../../model/services/loginByApiKey/loginByApiKey';
+import { loginActions } from '../../model/slice/loginSlice';
 import styles from './LoginForm.module.css';
 
-import type { ApiKeyScope, User } from '@/entities/User';
+import type { ApiKeyScope } from '../../model/types/loginSchema';
 export const LoginForm = () => {
   const dispatch = useAppDispatch();
+  const password = useAppSelector(getLoginPassword);
+  const scope = useAppSelector(getLoginScope);
 
-  const [password, setPassword] = useState('');
-  const [scope, setScope] = useState<ApiKeyScope>('GIGACHAT_API_PERS');
   const [error, setError] = useState(false);
 
   const handleSubmit = () => {
@@ -28,12 +23,7 @@ export const LoginForm = () => {
       setError(true);
       return;
     }
-    const authData: User = {
-      apiKey: password,
-      apiKeyScope: scope,
-    };
-    localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(authData));
-    dispatch(userActions.setAuthData(authData));
+    dispatch(loginByApiKey({ scope, password }));
   };
 
   return (
@@ -44,12 +34,14 @@ export const LoginForm = () => {
             <TextField
               fullWidth
               size="small"
-              label="Пароль"
+              label="Ключ авторизации"
               type="password"
               error={error}
               helperText={error ? 'Поле не должно быть пустым' : undefined}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                dispatch(loginActions.setPassword(e.target.value))
+              }
               onKeyDown={(e) => {
                 if (['Enter', 'NumEnter'].includes(e.key)) {
                   handleSubmit();
@@ -60,7 +52,9 @@ export const LoginForm = () => {
           <RadioGroup
             row
             value={scope}
-            onChange={(e) => setScope(e.target.value as ApiKeyScope)}
+            onChange={(e) =>
+              dispatch(loginActions.setScope(e.target.value as ApiKeyScope))
+            }
           >
             <FormControlLabel
               value="GIGACHAT_API_PERS"
@@ -75,7 +69,7 @@ export const LoginForm = () => {
             <FormControlLabel
               value="GIGACHAT_API_CORP"
               control={<Radio size="small" />}
-              label="Корпорация"
+              label="Pay as you go"
             />
           </RadioGroup>
         </div>

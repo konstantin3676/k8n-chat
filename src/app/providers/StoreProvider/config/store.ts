@@ -1,4 +1,5 @@
 import { userReducer } from '@/entities/User';
+import { loginReducer } from '@/features/AuthByApiKey';
 import { api } from '@/shared/api/api';
 import { configureStore } from '@reduxjs/toolkit';
 
@@ -10,6 +11,7 @@ const extraArg: ThunkExtraArg = {
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    login: loginReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
