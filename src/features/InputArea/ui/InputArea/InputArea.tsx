@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { chatActions, getChatMessages } from '@/entities/Chat';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
-import { AddOutlined, ArrowUpwardOutlined } from '@mui/icons-material';
+import { AddOutlined, ArrowUpwardOutlined, Stop } from '@mui/icons-material';
 import { IconButton, TextField } from '@mui/material';
 
 import { getStreamingResponse, getStreamingStatus } from '../../model/selectors/streamingSelectors';
 import { streamChat } from '../../model/services/streamChat';
+import { streamingActions } from '../../model/slice/streamingSlice';
 import styles from './InputArea.module.css';
 
 type Props = {
@@ -21,6 +22,7 @@ export const InputArea = ({ chatId }: Props) => {
   const messages = chatMessages[chatId];
   const streamingStatus = useAppSelector(getStreamingStatus);
   const streamingResponse = useAppSelector(getStreamingResponse);
+  const isActiveStatus = ['pending', 'streaming'].includes(streamingStatus);
 
   const [value, setValue] = useState('');
 
@@ -43,6 +45,11 @@ export const InputArea = ({ chatId }: Props) => {
     }
   };
 
+  const stopStreaming = () => {
+    abortControllerRef.current?.abort();
+    dispatch(streamingActions.resetStream());
+  };
+
   useEffect(() => {
     if (messages.length > 0 && messages.at(-1)?.role === 'user') {
       abortControllerRef.current = new AbortController();
@@ -51,7 +58,7 @@ export const InputArea = ({ chatId }: Props) => {
           {
             model: 'GigaChat-2',
             messages,
-            max_tokens: 100,
+            max_tokens: 500,
           },
           abortControllerRef.current.signal,
         ),
@@ -79,7 +86,17 @@ export const InputArea = ({ chatId }: Props) => {
   }, [chatId, dispatch, messages, streamingResponse, streamingStatus]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{
+        ...(messages.length === 0
+          ? {
+              flexBasis: '55%',
+              flexShrink: 0,
+            }
+          : {}),
+      }}
+    >
       <div className={styles.wrapper}>
         <div className={styles.controlContainer}>
           <IconButton size="small" sx={{ backgroundColor: 'common.white' }}>
@@ -106,7 +123,7 @@ export const InputArea = ({ chatId }: Props) => {
           />
           <IconButton
             size="small"
-            disabled={!value}
+            disabled={isActiveStatus ? undefined : !value}
             sx={{
               backgroundColor: 'primary.main',
               '&:hover': {
@@ -116,14 +133,23 @@ export const InputArea = ({ chatId }: Props) => {
                 backgroundColor: 'var(--btn-bg-color-disabled)',
               },
             }}
-            onClick={() => sendMessage()}
+            onClick={() => (isActiveStatus ? stopStreaming() : sendMessage())}
           >
-            <ArrowUpwardOutlined
-              sx={{
-                fontSize: '20px',
-                color: 'common.white',
-              }}
-            />
+            {isActiveStatus ? (
+              <Stop
+                sx={{
+                  fontSize: '20px',
+                  color: 'common.white',
+                }}
+              />
+            ) : (
+              <ArrowUpwardOutlined
+                sx={{
+                  fontSize: '20px',
+                  color: 'common.white',
+                }}
+              />
+            )}
           </IconButton>
         </div>
       </div>

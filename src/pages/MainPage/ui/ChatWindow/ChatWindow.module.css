@@ -5,3 +5,12 @@
   height: 100%;
   overflow: auto;
 }
+
+.mark {
+  height: 0;
+}
+
+.wrapper {
+  max-width: 800px;
+  width: 100%;
+}
