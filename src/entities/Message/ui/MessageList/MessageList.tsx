@@ -10,11 +10,11 @@ type Props = {
 export const MessageList = ({ messages }: Props) => {
   return (
     <div className={styles.container}>
-      {messages.map(({ id, role, content }) =>
+      {messages.map(({ role, content }, idx) =>
         role === 'user' ? (
-          <UserMessage key={id} content={content} />
+          <UserMessage key={idx} content={content} />
         ) : role === 'assistant' ? (
-          <AssistantMessage key={id} content={content} />
+          <AssistantMessage key={idx} content={content} />
         ) : null,
       )}
     </div>

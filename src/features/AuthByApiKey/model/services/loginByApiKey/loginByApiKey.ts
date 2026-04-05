@@ -17,7 +17,7 @@ export const loginByApiKey = createAsyncThunk<User, Props, ThunkConfig<string>>(
   async ({ password, scope }, { dispatch, rejectWithValue, extra }) => {
     try {
       const { data } = await extra.api.post<User>(
-        '/api/v2/oauth',
+        '/oauth',
         { scope },
         {
           headers: {

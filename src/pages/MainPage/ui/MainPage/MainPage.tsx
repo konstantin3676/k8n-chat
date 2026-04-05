@@ -1,13 +1,17 @@
-import { InputArea } from '@/features/InputArea/ui/InputArea/InputArea';
+import { getChatMessages } from '@/entities/Chat';
+import { InputArea } from '@/features/InputArea';
+import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 
 import { ChatWindow } from '../ChatWindow/ChatWindow';
 import styles from './MainPage.module.css';
 
 export const MainPage = () => {
+  const chatMessages = useAppSelector(getChatMessages);
+
   return (
     <div className={styles.container}>
-      <ChatWindow />
-      <InputArea />
+      <ChatWindow messages={chatMessages['1']} />
+      <InputArea chatId="1" />
     </div>
   );
 };

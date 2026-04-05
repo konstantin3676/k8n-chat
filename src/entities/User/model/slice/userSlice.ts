@@ -7,14 +7,14 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { User, UserSchema } from '../types/user';
 const initialState: UserSchema = {
   inited: false,
-  authData: undefined,
+  authData: null,
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setAuthData: (state, action: PayloadAction<User>) => {
+    setAuthData: (state, action: PayloadAction<User | null>) => {
       state.authData = action.payload;
     },
     initAuthData: (state) => {
@@ -31,7 +31,7 @@ export const userSlice = createSlice({
       state.inited = true;
     },
     logout: (state) => {
-      state.authData = undefined;
+      state.authData = null;
       localStorage.removeItem(USER_LOCALSTORAGE_KEY);
     },
   },

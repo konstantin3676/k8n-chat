@@ -11,6 +11,8 @@ type Props = {
 };
 
 export const AssistantMessage = ({ content }: Props) => {
+  if (content === '') return null;
+
   return (
     <div className={styles.container}>
       <div className={styles.messageContainer}>

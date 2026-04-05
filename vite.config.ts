@@ -13,8 +13,13 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api/v2/oauth': {
-        target: 'https://ngw.devices.sberbank.ru:9443',
+      '/oauth': {
+        target: 'https://ngw.devices.sberbank.ru:9443/api/v2',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/chat/completions': {
+        target: 'https://gigachat.devices.sberbank.ru/api/v1',
         changeOrigin: true,
         secure: false,
       },

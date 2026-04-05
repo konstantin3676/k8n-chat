@@ -5,5 +5,5 @@ export type User = {
 
 export type UserSchema = {
   inited: boolean;
-  authData?: User;
+  authData: User | null;
 };

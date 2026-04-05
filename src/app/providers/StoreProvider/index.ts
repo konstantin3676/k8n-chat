@@ -1,4 +1,4 @@
-export type { AppDispatch, RootState } from './config/store';
+export type { AppDispatch, AppThunk, RootState } from './config/store';
 export type {
   StateSchema,
   ThunkConfig,

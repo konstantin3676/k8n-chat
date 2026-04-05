@@ -1,6 +1,6 @@
 export type Message = {
-  id: string;
-  role: 'user' | 'assistant';
+  role: 'system' | 'user' | 'assistant' | 'function';
   content: string;
-  timestamp: string;
+  functions_state_id?: string;
+  attachments?: string[];
 };
