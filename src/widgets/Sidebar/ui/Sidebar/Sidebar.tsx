@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { ChatButton } from '@/entities/Chat';
 import { MenuOutlined } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
 
@@ -27,7 +28,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 });
 
 export const Sidebar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <Drawer
@@ -53,6 +54,7 @@ export const Sidebar = () => {
             <MenuOutlined />
           </IconButton>
         </div>
+        <ChatButton selected title="Тестовая кнопка с длинным названием" />
       </div>
     </Drawer>
   );
