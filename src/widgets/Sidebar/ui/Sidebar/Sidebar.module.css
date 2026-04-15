@@ -1,0 +1,15 @@
+.container {
+  padding: 13px;
+  height: 100%;
+  transition: background-color 300ms;
+
+  &.open {
+    background-color: var(--sidebar-bg-color);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
