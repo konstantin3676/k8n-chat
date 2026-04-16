@@ -1,0 +1,13 @@
+.title {
+  padding-left: 16px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(140, 141, 155);
+}
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

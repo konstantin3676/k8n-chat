@@ -11,4 +11,5 @@ export type ChatMessages = Record<string, Message[]>;
 export type ChatSchema = {
   chats: Chat[];
   chatMessages: ChatMessages;
+  selectedChatId: string;
 };

@@ -5,10 +5,11 @@ import styles from './ChatButton.module.css';
 
 type Props = {
   title: string;
+  handleClick: () => void;
   selected?: boolean;
 };
 
-export const ChatButton = ({ title, selected = false }: Props) => {
+export const ChatButton = ({ title, handleClick, selected = false }: Props) => {
   return (
     <ListItem
       dense
@@ -17,9 +18,11 @@ export const ChatButton = ({ title, selected = false }: Props) => {
           <MoreHorizOutlined sx={{ fontSize: '16px' }} />
         </div>
       }
+      onClick={handleClick}
       sx={{
         borderRadius: '999px',
         paddingRight: '36px',
+        minHeight: '36px',
         '& .MuiListItemSecondaryAction-root': {
           opacity: 0,
           right: '14px',

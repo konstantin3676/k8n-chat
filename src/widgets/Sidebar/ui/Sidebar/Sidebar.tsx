@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { AddChatButton } from '@/features/AddChatButton';
+import { ChatList } from '@/features/ChatList';
 import { MenuOutlined } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
 
@@ -54,7 +55,12 @@ export const Sidebar = () => {
             <MenuOutlined />
           </IconButton>
         </div>
-        <AddChatButton />
+        <div className={styles.wrapper}>
+          <AddChatButton />
+          <div className={`${styles.chatList} ${open ? styles.open : ''}`}>
+            <ChatList />
+          </div>
+        </div>
       </div>
     </Drawer>
   );

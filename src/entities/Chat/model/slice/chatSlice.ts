@@ -6,11 +6,23 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { Chat, ChatSchema } from '../types/chat';
 import type { Message } from '@/entities/Message';
-const initialState: ChatSchema = {
-  chats: [],
-  chatMessages: {
-    '1': [],
-  },
+
+const initialState: () => ChatSchema = () => {
+  const newChatId = uuid4();
+
+  return {
+    chats: [
+      {
+        id: newChatId,
+        name: '',
+        isNew: true,
+      },
+    ],
+    chatMessages: {
+      [newChatId]: [],
+    },
+    selectedChatId: newChatId,
+  };
 };
 
 export const chatSlice = createSlice({
@@ -20,15 +32,23 @@ export const chatSlice = createSlice({
     setChats: (state, action: PayloadAction<Chat[]>) => {
       state.chats = action.payload;
     },
+    setSelectedChatId: (state, action: PayloadAction<string>) => {
+      state.selectedChatId = action.payload;
+    },
     addNewChat: (state) => {
-      if (state.chats.at(-1)?.isNew) {
+      const lastChat = state.chats.at(-1);
+      if (lastChat?.isNew) {
+        state.selectedChatId = lastChat.id;
         return;
       }
+      const newChatId = uuid4();
       state.chats.push({
-        id: uuid4(),
+        id: newChatId,
         name: '',
         isNew: true,
       });
+      state.chatMessages[newChatId] = [];
+      state.selectedChatId = newChatId;
     },
     addChatMessages: (
       state,
@@ -36,7 +56,15 @@ export const chatSlice = createSlice({
         payload: { chatId, messages },
       }: PayloadAction<{ chatId: string; messages: Message[] }>,
     ) => {
-      state.chatMessages[chatId].push(...messages);
+      const chatMessages = state.chatMessages[chatId];
+      if (chatMessages.length === 0) {
+        const currentChat = state.chats.find(({ id }) => id === chatId);
+        if (currentChat) {
+          currentChat.isNew = false;
+          currentChat.name = `${messages[0].content.slice(0, 50)}...`;
+        }
+      }
+      chatMessages.push(...messages);
     },
     updateLastChatMessageContent: (
       state,
