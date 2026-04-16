@@ -1,3 +1,5 @@
+import uuid4 from 'uuid4';
+
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -17,6 +19,16 @@ export const chatSlice = createSlice({
   reducers: {
     setChats: (state, action: PayloadAction<Chat[]>) => {
       state.chats = action.payload;
+    },
+    addNewChat: (state) => {
+      if (state.chats.at(-1)?.isNew) {
+        return;
+      }
+      state.chats.push({
+        id: uuid4(),
+        name: '',
+        isNew: true,
+      });
     },
     addChatMessages: (
       state,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ChatButton } from '@/entities/Chat';
+import { AddChatButton } from '@/features/AddChatButton';
 import { MenuOutlined } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
 
@@ -54,7 +54,7 @@ export const Sidebar = () => {
             <MenuOutlined />
           </IconButton>
         </div>
-        <ChatButton selected title="Тестовая кнопка с длинным названием" />
+        <AddChatButton />
       </div>
     </Drawer>
   );

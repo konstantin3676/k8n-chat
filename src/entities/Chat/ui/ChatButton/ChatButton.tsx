@@ -26,14 +26,14 @@ export const ChatButton = ({ title, selected = false }: Props) => {
         },
         transition: 'background-color 300ms, opacity 300ms',
         '&:hover': {
-          bgcolor: 'rgba(169, 170, 184, 0.3)',
+          bgcolor: 'var(--btn-bg-color-disabled)',
           '& .MuiListItemSecondaryAction-root': {
             opacity: 1,
           },
         },
         ...(selected
           ? {
-              bgcolor: 'rgba(169, 170, 184, 0.3)',
+              bgcolor: 'var(--btn-bg-color-disabled)',
               '& .MuiListItemSecondaryAction-root': {
                 opacity: 1,
               },
