@@ -4,6 +4,7 @@ import { chatActions, getChatMessages, getSelectedChatId } from '@/entities/Chat
 import { InputArea } from '@/features/InputArea';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
+import { ChatRenameModal } from '@/widgets/ChatRenameModal';
 import { ConfirmationModal } from '@/widgets/ConfirmationModal';
 import { Sidebar } from '@/widgets/Sidebar';
 
@@ -18,11 +19,15 @@ export const MainPage = () => {
   const [openDeleteChatModal, setOpenDeleteChatModal] = useState<string | null>(
     null,
   );
+  const [openRenameChatModal, setOpenRenameChatModal] = useState<string | null>(
+    null,
+  );
 
   return (
     <div className={styles.container}>
       <Sidebar
         openDeleteChatModal={(chatId: string) => setOpenDeleteChatModal(chatId)}
+        openRenameChatModal={(chatId: string) => setOpenRenameChatModal(chatId)}
       />
       <div className={styles.chatContainer}>
         <ChatWindow messages={chatMessages[selectedChatId]} />
@@ -40,6 +45,22 @@ export const MainPage = () => {
           }
         }}
       />
+      {openRenameChatModal && (
+        <ChatRenameModal
+          chatId={openRenameChatModal}
+          onClose={() => setOpenRenameChatModal(null)}
+          renameChat={(newName: string) => {
+            if (openRenameChatModal) {
+              dispatch(
+                chatActions.renameChat({
+                  newName,
+                  chatId: openRenameChatModal,
+                }),
+              );
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

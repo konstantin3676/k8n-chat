@@ -30,9 +30,13 @@ const closedMixin = (theme: Theme): CSSObject => ({
 
 type Props = {
   openDeleteChatModal: (chatId: string) => void;
+  openRenameChatModal: (chatId: string) => void;
 };
 
-export const Sidebar = ({ openDeleteChatModal }: Props) => {
+export const Sidebar = ({
+  openDeleteChatModal,
+  openRenameChatModal,
+}: Props) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -62,7 +66,10 @@ export const Sidebar = ({ openDeleteChatModal }: Props) => {
         <div className={styles.wrapper}>
           <AddChatButton />
           <div className={`${styles.chatList} ${open ? styles.open : ''}`}>
-            <ChatList openDeleteChatModal={openDeleteChatModal} />
+            <ChatList
+              openDeleteChatModal={openDeleteChatModal}
+              openRenameChatModal={openRenameChatModal}
+            />
           </div>
         </div>
       </div>

@@ -6,9 +6,13 @@ import styles from './ChatList.module.css';
 
 type Props = {
   openDeleteChatModal: (chatId: string) => void;
+  openRenameChatModal: (chatId: string) => void;
 };
 
-export const ChatList = ({ openDeleteChatModal }: Props) => {
+export const ChatList = ({
+  openDeleteChatModal,
+  openRenameChatModal,
+}: Props) => {
   const dispatch = useAppDispatch();
   const chats = useAppSelector(getChatList);
   const selectedChatId = useAppSelector(getSelectedChatId);
@@ -24,7 +28,7 @@ export const ChatList = ({ openDeleteChatModal }: Props) => {
               title={name}
               selected={selectedChatId === id}
               handleClick={() => dispatch(chatActions.setSelectedChatId(id))}
-              openRenameChatModal={() => {}}
+              openRenameChatModal={() => openRenameChatModal(id)}
               openDeleteChatModal={() => openDeleteChatModal(id)}
             />
           ),

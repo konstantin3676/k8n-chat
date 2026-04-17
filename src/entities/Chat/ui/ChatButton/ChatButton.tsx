@@ -52,6 +52,7 @@ export const ChatButton = ({
             bgcolor: 'var(--btn-bg-color-disabled)',
             '& .MuiListItemSecondaryAction-root': {
               opacity: 1,
+              right: '14px',
             },
           },
           ...(selected
@@ -59,6 +60,7 @@ export const ChatButton = ({
                 bgcolor: 'var(--btn-bg-color-disabled)',
                 '& .MuiListItemSecondaryAction-root': {
                   opacity: 1,
+                  right: '14px',
                 },
               }
             : {}),

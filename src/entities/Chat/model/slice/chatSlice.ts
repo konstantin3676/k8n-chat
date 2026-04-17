@@ -50,6 +50,17 @@ export const chatSlice = createSlice({
       state.chatMessages[newChatId] = [];
       state.selectedChatId = newChatId;
     },
+    renameChat: (
+      state,
+      {
+        payload: { chatId, newName },
+      }: PayloadAction<{ chatId: string; newName: string }>,
+    ) => {
+      const chat = state.chats.find(({ id }) => id === chatId);
+      if (chat) {
+        chat.name = newName;
+      }
+    },
     deleteChat: (state, action: PayloadAction<string>) => {
       const chatId = action.payload;
       state.chats = state.chats.filter(({ id }) => id !== chatId);
