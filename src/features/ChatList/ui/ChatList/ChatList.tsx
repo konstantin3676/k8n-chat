@@ -20,6 +20,8 @@ export const ChatList = () => {
               title={name}
               selected={selectedChatId === id}
               handleClick={() => dispatch(chatActions.setSelectedChatId(id))}
+              openRenameChatModal={() => {}}
+              openDeleteChatModal={() => {}}
             />
           ),
         )}
