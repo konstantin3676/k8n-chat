@@ -28,7 +28,11 @@ const closedMixin = (theme: Theme): CSSObject => ({
   width: 60,
 });
 
-export const Sidebar = () => {
+type Props = {
+  openDeleteChatModal: (chatId: string) => void;
+};
+
+export const Sidebar = ({ openDeleteChatModal }: Props) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -58,7 +62,7 @@ export const Sidebar = () => {
         <div className={styles.wrapper}>
           <AddChatButton />
           <div className={`${styles.chatList} ${open ? styles.open : ''}`}>
-            <ChatList />
+            <ChatList openDeleteChatModal={openDeleteChatModal} />
           </div>
         </div>
       </div>

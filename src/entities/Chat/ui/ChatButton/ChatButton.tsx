@@ -30,7 +30,10 @@ export const ChatButton = ({
         secondaryAction={
           <div
             className={styles.action}
-            onClick={(e) => setAnchorEl(e.currentTarget)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setAnchorEl(e.currentTarget);
+            }}
           >
             <MoreHorizOutlined sx={{ fontSize: '16px' }} />
           </div>

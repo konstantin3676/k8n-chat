@@ -50,6 +50,26 @@ export const chatSlice = createSlice({
       state.chatMessages[newChatId] = [];
       state.selectedChatId = newChatId;
     },
+    deleteChat: (state, action: PayloadAction<string>) => {
+      const chatId = action.payload;
+      state.chats = state.chats.filter(({ id }) => id !== chatId);
+      delete state.chatMessages[chatId];
+      if (state.selectedChatId === chatId) {
+        const existingNewChat = state.chats.find(({ isNew }) => isNew);
+        if (existingNewChat) {
+          state.selectedChatId = existingNewChat.id;
+        } else {
+          const newChatId = uuid4();
+          state.chats.push({
+            id: newChatId,
+            name: '',
+            isNew: true,
+          });
+          state.chatMessages[newChatId] = [];
+          state.selectedChatId = newChatId;
+        }
+      }
+    },
     addChatMessages: (
       state,
       {

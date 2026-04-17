@@ -4,7 +4,11 @@ import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 
 import styles from './ChatList.module.css';
 
-export const ChatList = () => {
+type Props = {
+  openDeleteChatModal: (chatId: string) => void;
+};
+
+export const ChatList = ({ openDeleteChatModal }: Props) => {
   const dispatch = useAppDispatch();
   const chats = useAppSelector(getChatList);
   const selectedChatId = useAppSelector(getSelectedChatId);
@@ -21,7 +25,7 @@ export const ChatList = () => {
               selected={selectedChatId === id}
               handleClick={() => dispatch(chatActions.setSelectedChatId(id))}
               openRenameChatModal={() => {}}
-              openDeleteChatModal={() => {}}
+              openDeleteChatModal={() => openDeleteChatModal(id)}
             />
           ),
         )}
