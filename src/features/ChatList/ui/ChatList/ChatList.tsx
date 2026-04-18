@@ -23,7 +23,7 @@ export const ChatList = ({
   const selectedChatId = useAppSelector(getSelectedChatId);
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.title}>Чаты</div>
       <div className={styles.chatContainer}>
         {(isSearchMode ? chatSearchResult : chats).map(({ id, name, isNew }) =>
