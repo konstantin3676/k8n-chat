@@ -3,17 +3,29 @@ export type Model = {
   type: 'chat' | 'embedder';
 };
 
-export type SettingsSchema = {
-  isLoading: boolean;
+export type Settings = {
   model: Model['id'];
+  temperature?: number;
+  topP?: number;
+  maxTokens?: number;
+  repetitionPenalty?: number;
+};
+
+export type SettingsSchema = {
+  settings: Settings;
   modelOptions: Model[];
-  temperature: string;
-  topP: string;
-  maxTokens: string;
-  repetitionPenalty: string;
+  isLoading: boolean;
   error?: string;
 };
 
 export type ModelOptionsResponse = {
   data: Model[];
+};
+
+export type SettingsModalData = {
+  model: string;
+  temperature: string;
+  topP: string;
+  maxTokens: string;
+  repetitionPenalty: string;
 };

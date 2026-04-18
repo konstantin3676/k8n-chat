@@ -31,7 +31,7 @@ export const MainPage = () => {
     dispatch(fetchModelOptions()).then(({ meta, payload }) => {
       if (meta.requestStatus === 'fulfilled' && payload) {
         dispatch(
-          settingsActions.setModel(
+          settingsActions.setInitModel(
             (payload as ModelOptionsResponse).data[0]?.id,
           ),
         );
@@ -50,18 +50,20 @@ export const MainPage = () => {
         <ChatWindow messages={chatMessages[selectedChatId]} />
         <InputArea chatId={selectedChatId} />
       </div>
-      <ConfirmationModal
-        title="Удалить чат"
-        okText="Удалить"
-        contentText="Это действие навсегда удалит чат и не может быть отменено. Пожалуйста, подтвердите для продолжения."
-        open={Boolean(openDeleteChatModal)}
-        onClose={() => setOpenDeleteChatModal(null)}
-        handleOkClick={() => {
-          if (openDeleteChatModal) {
-            dispatch(chatActions.deleteChat(openDeleteChatModal));
-          }
-        }}
-      />
+      {openDeleteChatModal && (
+        <ConfirmationModal
+          title="Удалить чат"
+          okText="Удалить"
+          contentText="Это действие навсегда удалит чат и не может быть отменено. Пожалуйста, подтвердите для продолжения."
+          open={Boolean(openDeleteChatModal)}
+          onClose={() => setOpenDeleteChatModal(null)}
+          handleOkClick={() => {
+            if (openDeleteChatModal) {
+              dispatch(chatActions.deleteChat(openDeleteChatModal));
+            }
+          }}
+        />
+      )}
       {openRenameChatModal && (
         <ChatRenameModal
           chatId={openRenameChatModal}
@@ -78,10 +80,12 @@ export const MainPage = () => {
           }}
         />
       )}
-      <SettingsModal
-        open={Boolean(openSettingsModal)}
-        onClose={() => setOpenSettingsModal(false)}
-      />
+      {openSettingsModal && (
+        <SettingsModal
+          open={Boolean(openSettingsModal)}
+          onClose={() => setOpenSettingsModal(false)}
+        />
+      )}
     </div>
   );
 };

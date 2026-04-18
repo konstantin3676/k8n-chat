@@ -4,15 +4,11 @@ import { fetchModelOptions } from '../services/fetchModelOptions';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import type { Model, SettingsSchema } from '../types/settingsSchema';
+import type { Settings, SettingsSchema } from '../types/settingsSchema';
 const initialState: SettingsSchema = {
+  settings: { model: '' },
   modelOptions: [],
   isLoading: false,
-  model: '',
-  temperature: '',
-  topP: '',
-  maxTokens: '',
-  repetitionPenalty: '',
   error: undefined,
 };
 
@@ -20,20 +16,13 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setModel: (state, action: PayloadAction<Model['id']>) => {
-      state.model = action.payload;
+    setSettings: (state, action: PayloadAction<Settings>) => {
+      state.settings = action.payload;
     },
-    setTemperature: (state, action: PayloadAction<string>) => {
-      state.temperature = action.payload;
-    },
-    setTopP: (state, action: PayloadAction<string>) => {
-      state.topP = action.payload;
-    },
-    setMaxTokens: (state, action: PayloadAction<string>) => {
-      state.maxTokens = action.payload;
-    },
-    setRepetitionPenalty: (state, action: PayloadAction<string>) => {
-      state.repetitionPenalty = action.payload;
+    setInitModel: (state, action: PayloadAction<string>) => {
+      if (!state.settings.model && action.payload) {
+        state.settings.model = action.payload;
+      }
     },
   },
   extraReducers: (builder) => {

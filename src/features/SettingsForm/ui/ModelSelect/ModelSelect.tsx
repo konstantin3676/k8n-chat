@@ -1,14 +1,15 @@
-import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { MenuItem, TextField } from '@mui/material';
 
-import { getSettingsModel, getSettingsModelOptions } from '../../model/selectors/settingsSelectors';
-import { settingsActions } from '../../model/slice/settingsSlice';
+import { getSettingsModelOptions } from '../../model/selectors/settingsSelectors';
 
-export const ModelSelect = () => {
-  const dispatch = useAppDispatch();
+type Props = {
+  model: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+export const ModelSelect = ({ model, handleChange }: Props) => {
   const modelOptions = useAppSelector(getSettingsModelOptions);
-  const model = useAppSelector(getSettingsModel);
 
   return (
     <TextField
@@ -16,10 +17,9 @@ export const ModelSelect = () => {
       size="small"
       select
       label="Модель"
+      name="model"
       value={model}
-      onChange={(e) => {
-        dispatch(settingsActions.setModel(e.target.value));
-      }}
+      onChange={handleChange}
       slotProps={{
         inputLabel: {
           shrink: true,
