@@ -6,6 +6,7 @@ import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { ChatRenameModal } from '@/widgets/ChatRenameModal';
 import { ConfirmationModal } from '@/widgets/ConfirmationModal';
+import { SettingsModal } from '@/widgets/SettingsModal';
 import { Sidebar } from '@/widgets/Sidebar';
 
 import { ChatWindow } from '../ChatWindow/ChatWindow';
@@ -22,12 +23,14 @@ export const MainPage = () => {
   const [openRenameChatModal, setOpenRenameChatModal] = useState<string | null>(
     null,
   );
+  const [openSettingsModal, setOpenSettingsModal] = useState(false);
 
   return (
     <div className={styles.container}>
       <Sidebar
         openDeleteChatModal={(chatId: string) => setOpenDeleteChatModal(chatId)}
         openRenameChatModal={(chatId: string) => setOpenRenameChatModal(chatId)}
+        openSettingsModal={() => setOpenSettingsModal(true)}
       />
       <div className={styles.chatContainer}>
         <ChatWindow messages={chatMessages[selectedChatId]} />
@@ -61,6 +64,10 @@ export const MainPage = () => {
           }}
         />
       )}
+      <SettingsModal
+        open={Boolean(openSettingsModal)}
+        onClose={() => setOpenSettingsModal(false)}
+      />
     </div>
   );
 };

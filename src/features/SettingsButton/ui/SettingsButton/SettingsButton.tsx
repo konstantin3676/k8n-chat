@@ -1,11 +1,15 @@
 import { SettingsOutlined } from '@mui/icons-material';
 import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
-export const SettingsButton = () => {
+type Props = {
+  openSettingsModal: () => void;
+};
+
+export const SettingsButton = ({ openSettingsModal }: Props) => {
   return (
     <ListItem
       dense
-      onClick={() => {}}
+      onClick={() => openSettingsModal()}
       sx={{
         borderRadius: '999px',
         paddingLeft: '10px',

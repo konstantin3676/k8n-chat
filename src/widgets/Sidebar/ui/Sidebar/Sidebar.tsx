@@ -33,11 +33,13 @@ const closedMixin = (theme: Theme): CSSObject => ({
 type Props = {
   openDeleteChatModal: (chatId: string) => void;
   openRenameChatModal: (chatId: string) => void;
+  openSettingsModal: () => void;
 };
 
 export const Sidebar = ({
   openDeleteChatModal,
   openRenameChatModal,
+  openSettingsModal,
 }: Props) => {
   const [open, setOpen] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -81,7 +83,7 @@ export const Sidebar = ({
               openRenameChatModal={openRenameChatModal}
             />
           </div>
-          <SettingsButton />
+          <SettingsButton openSettingsModal={openSettingsModal} />
         </div>
       </div>
     </Drawer>
