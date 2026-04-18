@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { chatActions, getChatMessages, getSelectedChatId } from '@/entities/Chat';
 import { InputArea } from '@/features/InputArea';
-import { fetchModelOptions } from '@/features/SettingsForm';
+import { fetchModelOptions, settingsActions } from '@/features/SettingsForm';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { ChatRenameModal } from '@/widgets/ChatRenameModal';
@@ -13,6 +13,7 @@ import { Sidebar } from '@/widgets/Sidebar';
 import { ChatWindow } from '../ChatWindow/ChatWindow';
 import styles from './MainPage.module.css';
 
+import type { ModelOptionsResponse } from '@/features/SettingsForm';
 export const MainPage = () => {
   const dispatch = useAppDispatch();
   const chatMessages = useAppSelector(getChatMessages);
@@ -27,7 +28,15 @@ export const MainPage = () => {
   const [openSettingsModal, setOpenSettingsModal] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchModelOptions());
+    dispatch(fetchModelOptions()).then(({ meta, payload }) => {
+      if (meta.requestStatus === 'fulfilled' && payload) {
+        dispatch(
+          settingsActions.setModel(
+            (payload as ModelOptionsResponse).data[0]?.id,
+          ),
+        );
+      }
+    });
   }, [dispatch]);
 
   return (

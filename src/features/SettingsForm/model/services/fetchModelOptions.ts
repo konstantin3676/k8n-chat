@@ -1,11 +1,7 @@
 import type { ThunkConfig } from '@/app/providers/StoreProvider';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import type { Model } from '../types/settingsSchema';
-
-type ModelOptionsResponse = {
-  data: Model[];
-};
+import type { ModelOptionsResponse } from '../types/settingsSchema';
 
 export const fetchModelOptions = createAsyncThunk<
   ModelOptionsResponse,

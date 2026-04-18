@@ -8,11 +8,11 @@ import type { Model, SettingsSchema } from '../types/settingsSchema';
 const initialState: SettingsSchema = {
   modelOptions: [],
   isLoading: false,
-  model: null,
-  temperature: null,
-  topP: null,
-  maxTokens: null,
-  repetitionPenalty: null,
+  model: '',
+  temperature: '',
+  topP: '',
+  maxTokens: '',
+  repetitionPenalty: '',
   error: undefined,
 };
 
@@ -20,8 +20,20 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setModel: (state, action: PayloadAction<Model>) => {
+    setModel: (state, action: PayloadAction<Model['id']>) => {
       state.model = action.payload;
+    },
+    setTemperature: (state, action: PayloadAction<string>) => {
+      state.temperature = action.payload;
+    },
+    setTopP: (state, action: PayloadAction<string>) => {
+      state.topP = action.payload;
+    },
+    setMaxTokens: (state, action: PayloadAction<string>) => {
+      state.maxTokens = action.payload;
+    },
+    setRepetitionPenalty: (state, action: PayloadAction<string>) => {
+      state.repetitionPenalty = action.payload;
     },
   },
   extraReducers: (builder) => {

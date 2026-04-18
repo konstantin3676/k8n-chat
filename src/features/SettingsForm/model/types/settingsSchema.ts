@@ -5,11 +5,15 @@ export type Model = {
 
 export type SettingsSchema = {
   isLoading: boolean;
-  model: Model | null;
+  model: Model['id'];
   modelOptions: Model[];
-  temperature: number | null;
-  topP: number | null;
-  maxTokens: number | null;
-  repetitionPenalty: number | null;
+  temperature: string;
+  topP: string;
+  maxTokens: string;
+  repetitionPenalty: string;
   error?: string;
+};
+
+export type ModelOptionsResponse = {
+  data: Model[];
 };
