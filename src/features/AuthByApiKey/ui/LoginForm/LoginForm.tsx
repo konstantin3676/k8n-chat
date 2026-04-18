@@ -27,7 +27,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <Paper variant="outlined">
+    <Paper variant="outlined" sx={{ borderRadius: '16px' }}>
       <div className={styles.container}>
         <div>
           <div className={styles.passwordContainer}>
@@ -46,6 +46,11 @@ export const LoginForm = () => {
                 if (['Enter', 'NumEnter'].includes(e.key)) {
                   handleSubmit();
                 }
+              }}
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
               }}
             />
           </div>

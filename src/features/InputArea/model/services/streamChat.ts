@@ -22,16 +22,29 @@ const parseSSELine = (line: string): ChatStreamChunk | '[DONE]' | null => {
 };
 
 export const streamChat =
-  (request: ChatRequest, signal?: AbortSignal): AppThunk =>
+  (request: Pick<ChatRequest, 'messages'>, signal?: AbortSignal): AppThunk =>
   async (dispatch, getState) => {
-    dispatch(streamingActions.streamStart());
     const state = getState();
     const authData = state.user.authData;
 
     if (authData && !isValidAccessToken(authData.expires_at)) {
       dispatch(userActions.setAuthData(null));
       localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+      return;
     }
+
+    dispatch(streamingActions.streamStart());
+
+    const settings = state.settings.settings;
+    const body: ChatRequest = {
+      ...request,
+      model: settings.model,
+      temperature: settings.temperature,
+      top_p: settings.topP,
+      max_tokens: settings.maxTokens,
+      repetition_penalty: settings.repetitionPenalty,
+      stream: true,
+    };
 
     try {
       const response = await fetch(
@@ -43,7 +56,7 @@ export const streamChat =
             Authorization: `Bearer ${authData?.access_token}`,
             Accept: 'text/event-stream',
           },
-          body: JSON.stringify({ ...request, stream: true }),
+          body: JSON.stringify(body),
           signal,
         },
       );

@@ -1,3 +1,4 @@
+import { SETTINGS_LOCALSTORAGE_KEY } from '@/shared/const/localStorage';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { fetchModelOptions } from '../services/fetchModelOptions';
@@ -5,11 +6,36 @@ import { fetchModelOptions } from '../services/fetchModelOptions';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { Settings, SettingsSchema } from '../types/settingsSchema';
-const initialState: SettingsSchema = {
-  settings: { model: '' },
-  modelOptions: [],
-  isLoading: false,
-  error: undefined,
+const saveSettingsToLocalStorage = (state: SettingsSchema) => {
+  localStorage.setItem(
+    SETTINGS_LOCALSTORAGE_KEY,
+    JSON.stringify(state.settings),
+  );
+};
+
+const initialState: () => SettingsSchema = () => {
+  let settings = { model: '' };
+  const settingsDataString = localStorage.getItem(SETTINGS_LOCALSTORAGE_KEY);
+
+  if (settingsDataString) {
+    try {
+      const settingsData = JSON.parse(
+        settingsDataString,
+      ) as SettingsSchema['settings'];
+      if (settingsData) {
+        settings = settingsData;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return {
+    settings,
+    modelOptions: [],
+    isLoading: false,
+    error: undefined,
+  };
 };
 
 export const settingsSlice = createSlice({
@@ -18,10 +44,12 @@ export const settingsSlice = createSlice({
   reducers: {
     setSettings: (state, action: PayloadAction<Settings>) => {
       state.settings = action.payload;
+      saveSettingsToLocalStorage(state);
     },
     setInitModel: (state, action: PayloadAction<string>) => {
       if (!state.settings.model && action.payload) {
         state.settings.model = action.payload;
+        saveSettingsToLocalStorage(state);
       }
     },
   },

@@ -74,6 +74,8 @@ export const Sidebar = ({
             <SearchChatButton
               isSearchMode={isSearchMode}
               setIsSearchMode={setIsSearchMode}
+              openSidebar={open}
+              setOpenSidebar={setOpen}
             />
           </div>
           <div className={`${styles.chatList} ${open ? styles.open : ''}`}>

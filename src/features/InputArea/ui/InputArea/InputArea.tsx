@@ -53,16 +53,7 @@ export const InputArea = ({ chatId }: Props) => {
   useEffect(() => {
     if (messages.length > 0 && messages.at(-1)?.role === 'user') {
       abortControllerRef.current = new AbortController();
-      dispatch(
-        streamChat(
-          {
-            model: 'GigaChat-2',
-            messages,
-            max_tokens: 500,
-          },
-          abortControllerRef.current.signal,
-        ),
-      );
+      dispatch(streamChat({ messages }, abortControllerRef.current.signal));
     }
   }, [dispatch, messages]);
 

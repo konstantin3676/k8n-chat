@@ -9,9 +9,16 @@ import { InputAdornment, ListItem, ListItemIcon, ListItemText, TextField } from 
 type Props = {
   isSearchMode: boolean;
   setIsSearchMode: React.Dispatch<React.SetStateAction<boolean>>;
+  openSidebar: boolean;
+  setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const SearchChatButton = ({ isSearchMode, setIsSearchMode }: Props) => {
+export const SearchChatButton = ({
+  isSearchMode,
+  setIsSearchMode,
+  openSidebar,
+  setOpenSidebar,
+}: Props) => {
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
 
@@ -88,7 +95,12 @@ export const SearchChatButton = ({ isSearchMode, setIsSearchMode }: Props) => {
   return (
     <ListItem
       dense
-      onClick={() => setIsSearchMode(true)}
+      onClick={() => {
+        setIsSearchMode(true);
+        if (!openSidebar) {
+          setOpenSidebar(true);
+        }
+      }}
       sx={{
         borderRadius: '999px',
         paddingLeft: '10px',
