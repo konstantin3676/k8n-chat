@@ -1,11 +1,29 @@
 import { useState } from 'react';
 
+import { chatActions } from '@/entities/Chat';
+import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
+import { useDebounce } from '@/shared/utils/hooks/useDebounce';
 import { CloseOutlined, SearchOutlined } from '@mui/icons-material';
 import { InputAdornment, ListItem, ListItemIcon, ListItemText, TextField } from '@mui/material';
 
-export const SearchChatButton = () => {
-  const [isSearchMode, setIsSearchMode] = useState(false);
+type Props = {
+  isSearchMode: boolean;
+  setIsSearchMode: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const SearchChatButton = ({ isSearchMode, setIsSearchMode }: Props) => {
+  const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
+
+  const searchChats = useDebounce((value) =>
+    dispatch(chatActions.searchChats(value)),
+  );
+
+  const exitFromSearchMode = () => {
+    setIsSearchMode(false);
+    setSearchValue('');
+    dispatch(chatActions.setChatSearchResult([]));
+  };
 
   if (isSearchMode) {
     return (
@@ -14,7 +32,11 @@ export const SearchChatButton = () => {
         size="small"
         placeholder="Поиск в чатах"
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value;
+          setSearchValue(value);
+          searchChats(value);
+        }}
         slotProps={{
           input: {
             startAdornment: (
@@ -26,10 +48,7 @@ export const SearchChatButton = () => {
               <InputAdornment
                 position="end"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setIsSearchMode(false);
-                  setSearchValue('');
-                }}
+                onClick={() => exitFromSearchMode()}
               >
                 <CloseOutlined />
               </InputAdornment>
@@ -58,8 +77,9 @@ export const SearchChatButton = () => {
           },
         }}
         onBlur={() => {
-          setIsSearchMode(false);
-          setSearchValue('');
+          if (searchValue === '') {
+            exitFromSearchMode();
+          }
         }}
       />
     );

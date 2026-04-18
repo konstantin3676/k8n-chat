@@ -22,6 +22,7 @@ const initialState: () => ChatSchema = () => {
       [newChatId]: [],
     },
     selectedChatId: newChatId,
+    chatSearchResult: [],
   };
 };
 
@@ -34,6 +35,9 @@ export const chatSlice = createSlice({
     },
     setSelectedChatId: (state, action: PayloadAction<string>) => {
       state.selectedChatId = action.payload;
+    },
+    setChatSearchResult: (state, action: PayloadAction<Chat[]>) => {
+      state.chatSearchResult = action.payload;
     },
     addNewChat: (state) => {
       const lastChat = state.chats.at(-1);
@@ -80,6 +84,24 @@ export const chatSlice = createSlice({
           state.selectedChatId = newChatId;
         }
       }
+    },
+    searchChats: (state, action: PayloadAction<string>) => {
+      const searchValue = action.payload.trim().toLowerCase();
+
+      if (searchValue === '') {
+        state.chatSearchResult = [];
+        return;
+      }
+
+      state.chatSearchResult = state.chats.filter(({ id, name }) => {
+        if (name.toLowerCase().includes(searchValue)) {
+          return true;
+        }
+
+        return state.chatMessages[id].some(({ content }) =>
+          content.toLowerCase().includes(searchValue),
+        );
+      });
     },
     addChatMessages: (
       state,

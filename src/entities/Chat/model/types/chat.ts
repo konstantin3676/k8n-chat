@@ -12,4 +12,5 @@ export type ChatSchema = {
   chats: Chat[];
   chatMessages: ChatMessages;
   selectedChatId: string;
+  chatSearchResult: Chat[];
 };

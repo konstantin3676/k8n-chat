@@ -7,6 +7,8 @@ export const getChatList = (state: StateSchema) => state.chat.chats;
 export const getChatMessages = (state: StateSchema) => state.chat.chatMessages;
 export const getSelectedChatId = (state: StateSchema) =>
   state.chat.selectedChatId;
+export const getChatSearchResult = (state: StateSchema) =>
+  state.chat.chatSearchResult;
 
 export const getChatById = createSelector<
   [(state: StateSchema) => Chat[]],

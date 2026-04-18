@@ -4,6 +4,7 @@ export {
   getChatList,
   getChatMessages,
   getSelectedChatId,
+  getChatSearchResult,
   getChatById,
 } from './model/selectors/chatSelectors';
 export { ChatButton } from './ui/ChatButton/ChatButton';

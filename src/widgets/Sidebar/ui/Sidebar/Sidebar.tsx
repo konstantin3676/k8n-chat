@@ -39,6 +39,7 @@ export const Sidebar = ({
   openRenameChatModal,
 }: Props) => {
   const [open, setOpen] = useState(true);
+  const [isSearchMode, setIsSearchMode] = useState(false);
 
   return (
     <Drawer
@@ -67,10 +68,14 @@ export const Sidebar = ({
         <div className={styles.wrapper}>
           <div className={styles.buttonContainer}>
             <AddChatButton />
-            <SearchChatButton />
+            <SearchChatButton
+              isSearchMode={isSearchMode}
+              setIsSearchMode={setIsSearchMode}
+            />
           </div>
           <div className={`${styles.chatList} ${open ? styles.open : ''}`}>
             <ChatList
+              isSearchMode={isSearchMode}
               openDeleteChatModal={openDeleteChatModal}
               openRenameChatModal={openRenameChatModal}
             />
