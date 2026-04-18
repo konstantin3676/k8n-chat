@@ -35,7 +35,7 @@ export const streamChat =
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/chat/completions`,
+        `${import.meta.env.VITE_API_URL ?? 'http://localhost:5173'}/chat/completions`,
         {
           method: 'POST',
           headers: {

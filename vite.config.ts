@@ -23,6 +23,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/models': {
+        target: 'https://gigachat.devices.sberbank.ru/api/v1',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

@@ -1,21 +1,12 @@
 import { TextField } from '@mui/material';
 
+import { ModelSelect } from '../ModelSelect/ModelSelect';
 import styles from './SettingsForm.module.css';
 
 export const SettingsForm = () => {
   return (
     <div className={styles.container}>
-      <TextField
-        fullWidth
-        size="small"
-        select
-        label="Модель"
-        slotProps={{
-          inputLabel: {
-            shrink: true,
-          },
-        }}
-      ></TextField>
+      <ModelSelect />
       <TextField
         fullWidth
         size="small"

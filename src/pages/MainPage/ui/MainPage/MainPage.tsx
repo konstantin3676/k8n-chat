@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { chatActions, getChatMessages, getSelectedChatId } from '@/entities/Chat';
 import { InputArea } from '@/features/InputArea';
+import { fetchModelOptions } from '@/features/SettingsForm';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { ChatRenameModal } from '@/widgets/ChatRenameModal';
@@ -24,6 +25,10 @@ export const MainPage = () => {
     null,
   );
   const [openSettingsModal, setOpenSettingsModal] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchModelOptions());
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
