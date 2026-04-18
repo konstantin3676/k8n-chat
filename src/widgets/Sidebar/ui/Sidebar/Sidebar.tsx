@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { AddChatButton } from '@/features/AddChatButton';
 import { ChatList } from '@/features/ChatList';
+import { SearchChatButton } from '@/features/SearchChatButton';
 import { MenuOutlined } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
 
@@ -64,7 +65,10 @@ export const Sidebar = ({
           </IconButton>
         </div>
         <div className={styles.wrapper}>
-          <AddChatButton />
+          <div className={styles.buttonContainer}>
+            <AddChatButton />
+            <SearchChatButton />
+          </div>
           <div className={`${styles.chatList} ${open ? styles.open : ''}`}>
             <ChatList
               openDeleteChatModal={openDeleteChatModal}
