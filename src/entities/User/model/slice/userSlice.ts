@@ -21,11 +21,15 @@ export const userSlice = createSlice({
       const userData = localStorage.getItem(USER_LOCALSTORAGE_KEY);
 
       if (userData) {
-        const user = JSON.parse(userData) as User;
-        if (isValidAccessToken(user.expires_at)) {
-          state.authData = user;
-        } else {
-          localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+        try {
+          const user = JSON.parse(userData) as User;
+          if (isValidAccessToken(user.expires_at)) {
+            state.authData = user;
+          } else {
+            localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+          }
+        } catch (e) {
+          console.log(e);
         }
       }
       state.inited = true;

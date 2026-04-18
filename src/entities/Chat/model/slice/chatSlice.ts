@@ -1,27 +1,55 @@
 import uuid4 from 'uuid4';
 
+import { CHATS_LOCALSTORAGE_KEY } from '@/shared/const/localStorage';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import type { Chat, ChatSchema } from '../types/chat';
+import type { Chat, ChatSchema, ChatsData } from '../types/chat';
 import type { Message } from '@/entities/Message';
+const saveChatsDataToLocalStorage = (state: ChatSchema) => {
+  const chatsData = {
+    chats: state.chats,
+    chatMessages: state.chatMessages,
+  };
+  localStorage.setItem(CHATS_LOCALSTORAGE_KEY, JSON.stringify(chatsData));
+};
 
 const initialState: () => ChatSchema = () => {
   const newChatId = uuid4();
+  let selectedChatId = newChatId;
+  let chats: ChatSchema['chats'] = [
+    {
+      id: newChatId,
+      name: '',
+      isNew: true,
+    },
+  ];
+  let chatMessages: ChatSchema['chatMessages'] = {
+    [newChatId]: [],
+  };
+  const chatsDataString = localStorage.getItem(CHATS_LOCALSTORAGE_KEY);
+  if (chatsDataString) {
+    try {
+      const chatsData = JSON.parse(chatsDataString) as ChatsData;
+      const lastChat = chatsData.chats.at(-1);
+      if (lastChat?.isNew) {
+        chats = chatsData.chats;
+        chatMessages = chatsData.chatMessages;
+        selectedChatId = lastChat.id;
+      } else {
+        chats = [...chatsData.chats, ...chats];
+        Object.assign(chatMessages, chatsData.chatMessages);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return {
-    chats: [
-      {
-        id: newChatId,
-        name: '',
-        isNew: true,
-      },
-    ],
-    chatMessages: {
-      [newChatId]: [],
-    },
-    selectedChatId: newChatId,
+    chats,
+    chatMessages,
+    selectedChatId,
     chatSearchResult: [],
   };
 };
@@ -53,6 +81,7 @@ export const chatSlice = createSlice({
       });
       state.chatMessages[newChatId] = [];
       state.selectedChatId = newChatId;
+      saveChatsDataToLocalStorage(state);
     },
     renameChat: (
       state,
@@ -64,6 +93,7 @@ export const chatSlice = createSlice({
       if (chat) {
         chat.name = newName;
       }
+      saveChatsDataToLocalStorage(state);
     },
     deleteChat: (state, action: PayloadAction<string>) => {
       const chatId = action.payload;
@@ -84,6 +114,7 @@ export const chatSlice = createSlice({
           state.selectedChatId = newChatId;
         }
       }
+      saveChatsDataToLocalStorage(state);
     },
     searchChats: (state, action: PayloadAction<string>) => {
       const searchValue = action.payload.trim().toLowerCase();
@@ -118,6 +149,7 @@ export const chatSlice = createSlice({
         }
       }
       chatMessages.push(...messages);
+      saveChatsDataToLocalStorage(state);
     },
     updateLastChatMessageContent: (
       state,
@@ -129,6 +161,7 @@ export const chatSlice = createSlice({
       if (lastMessage) {
         lastMessage.content = content;
       }
+      saveChatsDataToLocalStorage(state);
     },
   },
 });
