@@ -4,7 +4,9 @@ import { chatActions, getChatMessages } from '@/entities/Chat';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { useFilePicker } from '@/shared/utils/hooks/useFilePicker';
-import { AddOutlined, ArrowUpwardOutlined, Stop } from '@mui/icons-material';
+import {
+    AddPhotoAlternateOutlined, ArrowUpwardOutlined, ImageOutlined, Stop
+} from '@mui/icons-material';
 import { IconButton, TextField, Tooltip } from '@mui/material';
 
 import { getStreamingResponse, getStreamingStatus } from '../../model/selectors/streamingSelectors';
@@ -12,6 +14,8 @@ import { streamChat } from '../../model/services/streamChat';
 import { uploadFiles } from '../../model/services/uploadFiles';
 import { streamingActions } from '../../model/slice/streamingSlice';
 import styles from './InputArea.module.css';
+
+import type { FilesUploadResponse } from '../../model/types/filesUpload';
 
 type Props = {
   chatId: string;
@@ -27,27 +31,42 @@ export const InputArea = ({ chatId }: Props) => {
   const isActiveStatus = ['pending', 'streaming'].includes(streamingStatus);
 
   const [value, setValue] = useState('');
+  const [attachedImage, setAttachedImage] =
+    useState<FilesUploadResponse | null>(null);
+
+  const onSelectImage = useCallback(
+    (selectedFiles: File[]) => {
+      dispatch(uploadFiles(selectedFiles)).then(({ meta, payload }) => {
+        if (meta.requestStatus === 'fulfilled' && payload) {
+          setAttachedImage(payload as FilesUploadResponse);
+        }
+      });
+    },
+    [dispatch],
+  );
 
   const { InputComponent, open: showFiles } = useFilePicker({
     accept: 'image/*',
     maxSize: 15 * 1024 * 1024,
     allowedTypes: ['image/png', 'image/jpeg', 'image/tiff', 'image/bmp'],
-    onSelect: useCallback(
-      (selectedFiles) => {
-        dispatch(uploadFiles(selectedFiles));
-      },
-      [dispatch],
-    ),
+    onSelect: onSelectImage,
   });
 
   const sendMessage = () => {
     dispatch(
       chatActions.addChatMessages({
         chatId,
-        messages: [{ role: 'user', content: value }],
+        messages: [
+          {
+            role: 'user',
+            content: value,
+            ...(attachedImage?.id ? { attachments: [attachedImage.id] } : {}),
+          },
+        ],
       }),
     );
     setValue('');
+    setAttachedImage(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -90,6 +109,12 @@ export const InputArea = ({ chatId }: Props) => {
     }
   }, [chatId, dispatch, messages, streamingResponse, streamingStatus]);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setValue('');
+    setAttachedImage(null);
+  }, [chatId]);
+
   return (
     <div
       className={styles.container}
@@ -105,13 +130,25 @@ export const InputArea = ({ chatId }: Props) => {
       <InputComponent />
       <div className={styles.wrapper}>
         <div className={styles.controlContainer}>
-          <Tooltip title="Прикрепить изображение">
+          <Tooltip
+            title={
+              attachedImage
+                ? `Открепить ${attachedImage.filename ? attachedImage.filename : 'изображение'}`
+                : 'Прикрепить изображение'
+            }
+          >
             <IconButton
               size="small"
               sx={{ backgroundColor: 'common.white' }}
-              onClick={() => showFiles()}
+              onClick={() =>
+                attachedImage ? setAttachedImage(null) : showFiles()
+              }
             >
-              <AddOutlined sx={{ fontSize: '20px' }} />
+              {attachedImage ? (
+                <ImageOutlined sx={{ fontSize: '20px' }} />
+              ) : (
+                <AddPhotoAlternateOutlined sx={{ fontSize: '20px' }} />
+              )}
             </IconButton>
           </Tooltip>
           <TextField
