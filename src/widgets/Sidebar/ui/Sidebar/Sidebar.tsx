@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { AddChatButton } from '@/features/AddChatButton';
 import { ChatList } from '@/features/ChatList';
+import { LogoutButton } from '@/features/LogoutButton';
 import { SearchChatButton } from '@/features/SearchChatButton';
 import { SettingsButton } from '@/features/SettingsButton';
 import { MenuOutlined } from '@mui/icons-material';
@@ -85,7 +86,10 @@ export const Sidebar = ({
               openRenameChatModal={openRenameChatModal}
             />
           </div>
-          <SettingsButton openSettingsModal={openSettingsModal} />
+          <div className={styles.buttonContainer}>
+            <SettingsButton openSettingsModal={openSettingsModal} />
+            <LogoutButton />
+          </div>
         </div>
       </div>
     </Drawer>
