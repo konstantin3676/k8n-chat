@@ -6,5 +6,7 @@ export { streamChat } from './model/services/streamChat';
 export { InputArea } from './ui/InputArea/InputArea';
 export {
   getStreamingStatus,
+  getStreamingError,
   getStreamingResponse,
 } from './model/selectors/streamingSelectors';
+export { streamingActions } from './model/slice/streamingSlice';

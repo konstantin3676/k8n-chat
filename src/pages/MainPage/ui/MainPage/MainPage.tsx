@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import { chatActions, getChatMessages, getSelectedChatId } from '@/entities/Chat';
-import { InputArea } from '@/features/InputArea';
+import { getStreamingError, InputArea, streamingActions } from '@/features/InputArea';
 import { fetchModelOptions, settingsActions } from '@/features/SettingsForm';
+import { AppAlert } from '@/shared/ui/AppAlert/AppAlert';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { ChatRenameModal } from '@/widgets/ChatRenameModal';
@@ -18,6 +19,7 @@ export const MainPage = () => {
   const dispatch = useAppDispatch();
   const chatMessages = useAppSelector(getChatMessages);
   const selectedChatId = useAppSelector(getSelectedChatId);
+  const streamingError = useAppSelector(getStreamingError);
 
   const [openDeleteChatModal, setOpenDeleteChatModal] = useState<string | null>(
     null,
@@ -84,6 +86,14 @@ export const MainPage = () => {
         <SettingsModal
           open={Boolean(openSettingsModal)}
           onClose={() => setOpenSettingsModal(false)}
+        />
+      )}
+      {streamingError && (
+        <AppAlert
+          content={streamingError}
+          onClose={() => {
+            dispatch(streamingActions.resetStream());
+          }}
         />
       )}
     </div>

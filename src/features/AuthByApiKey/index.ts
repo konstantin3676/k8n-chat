@@ -4,4 +4,5 @@ export { loginActions, loginReducer } from './model/slice/loginSlice';
 export {
   getLoginPassword,
   getLoginScope,
+  getLoginError,
 } from './model/selectors/loginSelectors';

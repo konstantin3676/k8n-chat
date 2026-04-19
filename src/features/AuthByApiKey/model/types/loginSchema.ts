@@ -7,5 +7,5 @@ export type LoginSchema = {
   password: string;
   scope: ApiKeyScope;
   isLoading: boolean;
-  error?: string;
+  error: string | null;
 };

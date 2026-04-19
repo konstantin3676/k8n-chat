@@ -9,7 +9,7 @@ const initialState: LoginSchema = {
   password: '',
   scope: 'GIGACHAT_API_PERS',
   isLoading: false,
-  error: undefined,
+  error: null,
 };
 
 export const loginSlice = createSlice({
@@ -22,10 +22,13 @@ export const loginSlice = createSlice({
     setScope: (state, action: PayloadAction<ApiKeyScope>) => {
       state.scope = action.payload;
     },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loginByApiKey.pending, (state) => {
-      state.error = undefined;
+      state.error = null;
       state.isLoading = true;
     });
     builder.addCase(loginByApiKey.fulfilled, (state) => {
@@ -34,7 +37,7 @@ export const loginSlice = createSlice({
     });
     builder.addCase(loginByApiKey.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.payload;
+      state.error = action.payload ?? null;
     });
   },
 });

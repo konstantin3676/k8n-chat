@@ -1,4 +1,6 @@
 import type { ThunkConfig } from '@/app/providers/StoreProvider';
+import { AxiosError } from 'axios';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { filesUploadActions } from '../slice/filesUploadSlice';
@@ -40,8 +42,11 @@ export const uploadFiles = createAsyncThunk<
 
       return data;
     } catch (e) {
-      console.log(e);
-      return rejectWithValue('error');
+      return rejectWithValue(
+        e instanceof AxiosError && e.response?.data?.message
+          ? e.response.data.message
+          : 'Unknown error',
+      );
     }
   },
 );

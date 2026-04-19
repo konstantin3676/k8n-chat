@@ -1,4 +1,5 @@
 import type { ThunkConfig } from '@/app/providers/StoreProvider';
+import { AxiosError } from 'axios';
 import uuid4 from 'uuid4';
 
 import { userActions } from '@/entities/User';
@@ -39,8 +40,11 @@ export const loginByApiKey = createAsyncThunk<User, Props, ThunkConfig<string>>(
 
       return data;
     } catch (e) {
-      console.log(e);
-      return rejectWithValue('error');
+      return rejectWithValue(
+        e instanceof AxiosError && e.response?.data?.message
+          ? e.response.data.message
+          : 'Unknown error',
+      );
     }
   },
 );

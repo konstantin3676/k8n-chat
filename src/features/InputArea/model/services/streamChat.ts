@@ -4,6 +4,7 @@ import type {
   ChatStreamChunk,
   StreamingSchema,
 } from '../types/streaming';
+
 import { userActions } from '@/entities/User';
 import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localStorage';
 import { isValidAccessToken } from '@/shared/utils/isValidAccessToken';
@@ -26,6 +27,7 @@ export const streamChat =
   async (dispatch, getState) => {
     const state = getState();
     const authData = state.user.authData;
+    const settings = state.settings.settings;
 
     if (authData && !isValidAccessToken(authData.expires_at)) {
       dispatch(userActions.setAuthData(null));
@@ -33,9 +35,13 @@ export const streamChat =
       return;
     }
 
+    if (settings.model === '') {
+      dispatch(streamingActions.streamError('Не выбрана модель'));
+      return;
+    }
+
     dispatch(streamingActions.streamStart());
 
-    const settings = state.settings.settings;
     const body: ChatRequest = {
       ...request,
       model: settings.model,

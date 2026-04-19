@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { chatActions, getChatMessages } from '@/entities/Chat';
+import { AppAlert } from '@/shared/ui/AppAlert/AppAlert';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
 import { useFilePicker } from '@/shared/utils/hooks/useFilePicker';
@@ -16,7 +17,6 @@ import { streamingActions } from '../../model/slice/streamingSlice';
 import styles from './InputArea.module.css';
 
 import type { FilesUploadResponse } from '../../model/types/filesUpload';
-
 type Props = {
   chatId: string;
 };
@@ -45,7 +45,12 @@ export const InputArea = ({ chatId }: Props) => {
     [dispatch],
   );
 
-  const { InputComponent, open: showFiles } = useFilePicker({
+  const {
+    InputComponent,
+    validationError,
+    open: showFiles,
+    reset: resetFiles,
+  } = useFilePicker({
     accept: 'image/*',
     maxSize: 15 * 1024 * 1024,
     allowedTypes: ['image/png', 'image/jpeg', 'image/tiff', 'image/bmp'],
@@ -202,6 +207,9 @@ export const InputArea = ({ chatId }: Props) => {
           </IconButton>
         </div>
       </div>
+      {validationError && (
+        <AppAlert content={validationError} onClose={() => resetFiles()} />
+      )}
     </div>
   );
 };

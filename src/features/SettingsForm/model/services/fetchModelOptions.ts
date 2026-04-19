@@ -1,8 +1,9 @@
 import type { ThunkConfig } from '@/app/providers/StoreProvider';
+import { AxiosError } from 'axios';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import type { ModelOptionsResponse } from '../types/settingsSchema';
-
 export const fetchModelOptions = createAsyncThunk<
   ModelOptionsResponse,
   undefined,
@@ -27,8 +28,11 @@ export const fetchModelOptions = createAsyncThunk<
 
       return data;
     } catch (e) {
-      console.log(e);
-      return rejectWithValue('error');
+      return rejectWithValue(
+        e instanceof AxiosError && e.response?.data?.message
+          ? e.response.data.message
+          : 'Unknown error',
+      );
     }
   },
 );
