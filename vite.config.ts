@@ -18,12 +18,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      '/chat/completions': {
-        target: 'https://gigachat.devices.sberbank.ru/api/v1',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/models': {
+      '^/(chat/completions|models|files)': {
         target: 'https://gigachat.devices.sberbank.ru/api/v1',
         changeOrigin: true,
         secure: false,

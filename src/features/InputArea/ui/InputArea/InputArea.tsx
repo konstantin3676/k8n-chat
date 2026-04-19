@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { chatActions, getChatMessages } from '@/entities/Chat';
 import { useAppDispatch } from '@/shared/utils/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/utils/hooks/useAppSelector';
+import { useFilePicker } from '@/shared/utils/hooks/useFilePicker';
 import { AddOutlined, ArrowUpwardOutlined, Stop } from '@mui/icons-material';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, TextField, Tooltip } from '@mui/material';
 
 import { getStreamingResponse, getStreamingStatus } from '../../model/selectors/streamingSelectors';
 import { streamChat } from '../../model/services/streamChat';
+import { uploadFiles } from '../../model/services/uploadFiles';
 import { streamingActions } from '../../model/slice/streamingSlice';
 import styles from './InputArea.module.css';
 
@@ -25,6 +27,18 @@ export const InputArea = ({ chatId }: Props) => {
   const isActiveStatus = ['pending', 'streaming'].includes(streamingStatus);
 
   const [value, setValue] = useState('');
+
+  const { InputComponent, open: showFiles } = useFilePicker({
+    accept: 'image/*',
+    maxSize: 15 * 1024 * 1024,
+    allowedTypes: ['image/png', 'image/jpeg', 'image/tiff', 'image/bmp'],
+    onSelect: useCallback(
+      (selectedFiles) => {
+        dispatch(uploadFiles(selectedFiles));
+      },
+      [dispatch],
+    ),
+  });
 
   const sendMessage = () => {
     dispatch(
@@ -88,11 +102,18 @@ export const InputArea = ({ chatId }: Props) => {
           : {}),
       }}
     >
+      <InputComponent />
       <div className={styles.wrapper}>
         <div className={styles.controlContainer}>
-          <IconButton size="small" sx={{ backgroundColor: 'common.white' }}>
-            <AddOutlined sx={{ fontSize: '20px' }} />
-          </IconButton>
+          <Tooltip title="Прикрепить изображение">
+            <IconButton
+              size="small"
+              sx={{ backgroundColor: 'common.white' }}
+              onClick={() => showFiles()}
+            >
+              <AddOutlined sx={{ fontSize: '20px' }} />
+            </IconButton>
+          </Tooltip>
           <TextField
             multiline
             fullWidth

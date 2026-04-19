@@ -1,7 +1,7 @@
 import { chatReducer } from '@/entities/Chat';
 import { userReducer } from '@/entities/User';
 import { loginReducer } from '@/features/AuthByApiKey';
-import { streamingReducer } from '@/features/InputArea';
+import { filesUploadReducer, streamingReducer } from '@/features/InputArea';
 import { settingsReducer } from '@/features/SettingsForm';
 import { api } from '@/shared/api/api';
 import { configureStore } from '@reduxjs/toolkit';
@@ -20,6 +20,7 @@ export const store = configureStore({
     streaming: streamingReducer,
     chat: chatReducer,
     settings: settingsReducer,
+    filesUpload: filesUploadReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

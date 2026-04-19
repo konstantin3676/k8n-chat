@@ -26,7 +26,7 @@ export const ChatMenu = ({
         paper: {
           sx: {
             borderRadius: '16px',
-            '& .MuiListItemIcon-root': {
+            '& .MuiListItemIcon-root.MuiListItemIcon-root': {
               minWidth: '26px',
             },
           },
